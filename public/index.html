@@ -8,46 +8,46 @@
 </head>
 <body>
   <header>
-    <div class="logo">בינה לקהילה ומסורת</div>
+    <div class="logo" id="logo">בינה לקהילה ומסורת</div>
     <nav>
       <select id="langSwitcher">
         <option value="he" selected>עברית</option>
         <option value="en">English</option>
       </select>
       <button>🔍</button>
-      <button>התחברות</button>
-      <button class="primary">הרשמה</button>
+      <button id="btnLogin">התחברות</button>
+      <button id="btnSignup" class="primary">הרשמה</button>
     </nav>
   </header>
 
   <main>
     <section class="search-box">
-      <h2>מחפשים בית כנסת קרוב?</h2>
-      <p>הכנס את המיקום שלך או שם קהילה:</p>
-      <input type="text" placeholder="הכנס את המיקום שלך או שם קהילה">
+      <h2 id="searchTitle">מחפשים בית כנסת קרוב?</h2>
+      <p id="searchDesc">הכנס את המיקום שלך או שם קהילה:</p>
+      <input id="searchInput" type="text" placeholder="הכנס את המיקום שלך או שם קהילה">
       <button>🔍</button>
     </section>
 
     <section class="apps">
-      <h3>רוצה להישאר מחובר?</h3>
-      <p>הורד את האפליקציה שלנו לסלולרי:</p>
+      <h3 id="appsTitle">רוצה להישאר מחובר?</h3>
+      <p id="appsDesc">הורד את האפליקציה שלנו לסלולרי:</p>
       <button>Google Play</button>
       <button>App Store</button>
     </section>
 
     <section class="features">
-      <h3>מה אפשר לעשות עם המערכת?</h3>
+      <h3 id="featuresTitle">מה אפשר לעשות עם המערכת?</h3>
       <ul>
-        <li>לקבל זמני תפילה ופעילויות בקהילה</li>
-        <li>להירשם, לתרום, להודיע הודעות</li>
-        <li>לנהל עליות, ספרי תורה, חברים בקהילה</li>
+        <li><span id="feature1">לקבל זמני תפילה ופעילויות בקהילה</span></li>
+        <li><span id="feature2">להירשם, לתרום, להודיע הודעות</span></li>
+        <li><span id="feature3">לנהל עליות, ספרי תורה, חברים בקהילה</span></li>
       </ul>
     </section>
 
     <section class="cta">
-      <h3>חדש כאן?</h3>
-      <button>רוצה להצטרף לקהילה</button>
-      <button class="primary">מנהל קהילה – פתח קהילה</button>
+      <h3 id="ctaTitle">חדש כאן?</h3>
+      <button id="btnJoin">רוצה להצטרף לקהילה</button>
+      <button id="btnCreate" class="primary">מנהל קהילה – פתח קהילה</button>
     </section>
   </main>
   <script src="scripts.js"></script>
