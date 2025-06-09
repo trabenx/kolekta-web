@@ -8,47 +8,80 @@
 </head>
 <body>
   <header>
-    <div class="logo" id="logo">בינה לקהילה ומסורת</div>
-    <nav>
-      <select id="langSwitcher">
-        <option value="he" selected>עברית</option>
-        <option value="en">English</option>
-      </select>
-      <button>🔍</button>
-      <button id="btnLogin">התחברות</button>
-      <button id="btnSignup" class="primary">הרשמה</button>
+    <div class="top-bar">
+      <div class="top-left">
+        <select id="langSwitcher">
+          <option value="he" selected>עברית</option>
+          <option value="en">English</option>
+        </select>
+        <span id="selectedCommunityLabel">קהילה נבחרת:</span>
+        <select id="communitySelect">
+          <option>אהבת חסד</option>
+        </select>
+      </div>
+      <div class="user-menu">
+        <span id="userName">יוסי לוי</span>
+        <span>🧑</span>
+        <span>⚙️</span>
+      </div>
+    </div>
+    <nav class="main-menu">
+      <a href="#" id="navHome">בית</a>
+      <a href="#" id="navAliyot">עליות</a>
+      <a href="#" id="navMessages">הודעות</a>
+      <a href="#" id="navClasses">שיעורים</a>
+      <a href="#" id="navPayments">תשלומים</a>
+      <a href="#" id="navTorah">ספרי תורה</a>
     </nav>
   </header>
 
   <main>
-    <section class="search-box">
-      <h2 id="searchTitle">מחפשים בית כנסת קרוב?</h2>
-      <p id="searchDesc">הכנס את המיקום שלך או שם קהילה:</p>
-      <input id="searchInput" type="text" placeholder="הכנס את המיקום שלך או שם קהילה">
-      <button>🔍</button>
+    <section class="welcome">
+      <p id="welcomeMain">✔ ברוך הבא יוסי, אתה גבאי ב"אהבת חסד"</p>
+      <p id="welcomeSecondary">🕍 אתה גם חבר ב: "תפארת משה" (משתמש רגיל)</p>
+      <button id="btnSwitchCommunity">החלפת קהילה ⮕</button>
     </section>
 
-    <section class="apps">
-      <h3 id="appsTitle">רוצה להישאר מחובר?</h3>
-      <p id="appsDesc">הורד את האפליקציה שלנו לסלולרי:</p>
-      <button>Google Play</button>
-      <button>App Store</button>
-    </section>
-
-    <section class="features">
-      <h3 id="featuresTitle">מה אפשר לעשות עם המערכת?</h3>
-      <ul>
-        <li><span id="feature1">לקבל זמני תפילה ופעילויות בקהילה</span></li>
-        <li><span id="feature2">להירשם, לתרום, להודיע הודעות</span></li>
-        <li><span id="feature3">לנהל עליות, ספרי תורה, חברים בקהילה</span></li>
-      </ul>
-    </section>
-
-    <section class="cta">
-      <h3 id="ctaTitle">חדש כאן?</h3>
-      <button id="btnJoin">רוצה להצטרף לקהילה</button>
-      <button id="btnCreate" class="primary">מנהל קהילה – פתח קהילה</button>
-    </section>
+    <div class="grid">
+      <section class="box">
+        <h3 id="todayServicesTitle">שירותי היום</h3>
+        <p id="serviceShacharit">שחרית: 06:30</p>
+        <p id="serviceMincha">מנחה: 18:40</p>
+      </section>
+      <section class="box">
+        <h3 id="aliyotTitle">עליות לשבת</h3>
+        <p id="aliyotMaftir">מפטיר: לא הוקצה <button id="editAliyot">עריכה ⮕</button></p>
+        <p id="aliyotHaftara">הפטרה: כהן</p>
+      </section>
+      <section class="box">
+        <h3 id="messagesTitle">הודעות קהילה</h3>
+        <ul>
+          <li id="msg1">פגישת ועד ביום שלישי</li>
+          <li id="msg2">ערב שירה בחמישי</li>
+        </ul>
+      </section>
+      <section class="box">
+        <h3 id="classesTitle">השיעורים השבוע</h3>
+        <ul>
+          <li id="class1">הלכה יומית ב-19:00</li>
+          <li id="class2">דף יומי ב-20:15</li>
+        </ul>
+      </section>
+      <section class="box">
+        <h3 id="paymentTitle">סטטוס תשלומים</h3>
+        <ul>
+          <li id="paymentDebt">חוב: דמי חבר שנתיים</li>
+          <li id="paymentLast">תשלום אחרון: ניסן</li>
+        </ul>
+      </section>
+      <section class="box">
+        <h3 id="torahTitle">ספרי תורה</h3>
+        <ul>
+          <li id="torah1">תורה כהן: בבית הכנסת</li>
+          <li id="torah2">תורה לוי: הושאל לחולון</li>
+        </ul>
+      </section>
+    </div>
   </main>
   <script src="scripts.js"></script>
 </body>
