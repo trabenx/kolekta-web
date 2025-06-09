@@ -1,0 +1,50 @@
+body {
+  font-family: sans-serif;
+  direction: rtl;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 1em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+nav select, nav button {
+  margin-right: 0.5em;
+}
+
+button.primary {
+  background-color: #2a61c3;
+  color: white;
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: 4px;
+}
+
+main section {
+  background: white;
+  margin: 1em auto;
+  padding: 1em;
+  max-width: 600px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+input {
+  width: 100%;
+  padding: 0.6em;
+  margin: 0.5em 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
