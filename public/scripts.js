@@ -1,61 +1,103 @@
 const translations = {
   en: {
     title: "Kolekta - Wisdom for Community and Tradition",
-    logo: "Wisdom for Community & Tradition",
-    login: "Login",
-    signup: "Sign Up",
-    searchTitle: "Looking for a nearby synagogue?",
-    searchDesc: "Enter your location or community name:",
-    searchPlaceholder: "Enter your location or community name",
-    appsTitle: "Want to stay connected?",
-    appsDesc: "Download our mobile app:",
-    featuresTitle: "What can you do with the system?",
-    feature1: "Get prayer times and community activities",
-    feature2: "Register, donate, send announcements",
-    feature3: "Manage aliyot, Torah scrolls, community members",
-    ctaTitle: "New here?",
-    join: "Want to join a community",
-    create: "Community admin – open a community",
+    selectedCommunityLabel: "Selected community:",
+    navHome: "Home",
+    navAliyot: "Aliyot",
+    navMessages: "Messages",
+    navClasses: "Classes",
+    navPayments: "Payments",
+    navTorah: "Sifrei Torah",
+    welcomeMain: "\u2714 Welcome Yossi, you are a Gabai in \"Ahavat Hesed\"",
+    welcomeSecondary: "\uD83D\uDED0 You are also a member of: \"Tiferet Moshe\" (regular user)",
+    btnSwitchCommunity: "Switch community \u27A5",
+    todayServicesTitle: "Today's Services",
+    serviceShacharit: "Shacharit: 06:30",
+    serviceMincha: "Mincha: 18:40",
+    aliyotTitle: "Aliyot for Shabbat",
+    aliyotMaftir: "Maftir: Not assigned",
+    editAliyot: "Edit \u27A5",
+    aliyotHaftara: "Haftarah: Cohen",
+    messagesTitle: "Community Messages",
+    msg1: "Board meeting Tuesday",
+    msg2: "Singing night Thursday",
+    classesTitle: "This Week's Classes",
+    class1: "Daily Halacha at 19:00",
+    class2: "Daf Yomi at 20:15",
+    paymentTitle: "Payment Status",
+    paymentDebt: "Debt: annual membership",
+    paymentLast: "Last payment: Nissan",
+    torahTitle: "Sifrei Torah",
+    torah1: "Torah Cohen: in the synagogue",
+    torah2: "Torah Levi: loaned to Holon"
   },
   he: {
     title: "קולקטה - בינה לקהילה ומסורת",
-    logo: "בינה לקהילה ומסורת",
-    login: "התחברות",
-    signup: "הרשמה",
-    searchTitle: "מחפשים בית כנסת קרוב?",
-    searchDesc: "הכנס את המיקום שלך או שם קהילה:",
-    searchPlaceholder: "הכנס את המיקום שלך או שם קהילה",
-    appsTitle: "רוצה להישאר מחובר?",
-    appsDesc: "הורד את האפליקציה שלנו לסלולרי:",
-    featuresTitle: "מה אפשר לעשות עם המערכת?",
-    feature1: "לקבל זמני תפילה ופעילויות בקהילה",
-    feature2: "להירשם, לתרום, להודיע הודעות",
-    feature3: "לנהל עליות, ספרי תורה, חברים בקהילה",
-    ctaTitle: "חדש כאן?",
-    join: "רוצה להצטרף לקהילה",
-    create: "מנהל קהילה – פתח קהילה",
-  },
+    selectedCommunityLabel: "קהילה נבחרת:",
+    navHome: "בית",
+    navAliyot: "עליות",
+    navMessages: "הודעות",
+    navClasses: "שיעורים",
+    navPayments: "תשלומים",
+    navTorah: "ספרי תורה",
+    welcomeMain: "✔ ברוך הבא יוסי, אתה גבאי ב\"אהבת חסד\"",
+    welcomeSecondary: "🕍 אתה גם חבר ב: \"תפארת משה\" (משתמש רגיל)",
+    btnSwitchCommunity: "החלפת קהילה ⮕",
+    todayServicesTitle: "שירותי היום",
+    serviceShacharit: "שחרית: 06:30",
+    serviceMincha: "מנחה: 18:40",
+    aliyotTitle: "עליות לשבת",
+    aliyotMaftir: "מפטיר: לא הוקצה",
+    editAliyot: "עריכה ⮕",
+    aliyotHaftara: "הפטרה: כהן",
+    messagesTitle: "הודעות קהילה",
+    msg1: "פגישת ועד ביום שלישי",
+    msg2: "ערב שירה בחמישי",
+    classesTitle: "השיעורים השבוע",
+    class1: "הלכה יומית ב-19:00",
+    class2: "דף יומי ב-20:15",
+    paymentTitle: "סטטוס תשלומים",
+    paymentDebt: "חוב: דמי חבר שנתיים",
+    paymentLast: "תשלום אחרון: ניסן",
+    torahTitle: "ספרי תורה",
+    torah1: "תורה כהן: בבית הכנסת",
+    torah2: "תורה לוי: הושאל לחולון"
+  }
 };
 
 function applyTranslations(lang) {
   const t = translations[lang];
   if (!t) return;
   document.title = t.title;
-  document.getElementById("logo").innerText = t.logo;
-  document.getElementById("btnLogin").innerText = t.login;
-  document.getElementById("btnSignup").innerText = t.signup;
-  document.getElementById("searchTitle").innerText = t.searchTitle;
-  document.getElementById("searchDesc").innerText = t.searchDesc;
-  document.getElementById("searchInput").placeholder = t.searchPlaceholder;
-  document.getElementById("appsTitle").innerText = t.appsTitle;
-  document.getElementById("appsDesc").innerText = t.appsDesc;
-  document.getElementById("featuresTitle").innerText = t.featuresTitle;
-  document.getElementById("feature1").innerText = t.feature1;
-  document.getElementById("feature2").innerText = t.feature2;
-  document.getElementById("feature3").innerText = t.feature3;
-  document.getElementById("ctaTitle").innerText = t.ctaTitle;
-  document.getElementById("btnJoin").innerText = t.join;
-  document.getElementById("btnCreate").innerText = t.create;
+  document.getElementById("selectedCommunityLabel").innerText = t.selectedCommunityLabel;
+  document.getElementById("navHome").innerText = t.navHome;
+  document.getElementById("navAliyot").innerText = t.navAliyot;
+  document.getElementById("navMessages").innerText = t.navMessages;
+  document.getElementById("navClasses").innerText = t.navClasses;
+  document.getElementById("navPayments").innerText = t.navPayments;
+  document.getElementById("navTorah").innerText = t.navTorah;
+  document.getElementById("welcomeMain").innerText = t.welcomeMain;
+  document.getElementById("welcomeSecondary").innerText = t.welcomeSecondary;
+  document.getElementById("btnSwitchCommunity").innerText = t.btnSwitchCommunity;
+  document.getElementById("todayServicesTitle").innerText = t.todayServicesTitle;
+  document.getElementById("serviceShacharit").innerText = t.serviceShacharit;
+  document.getElementById("serviceMincha").innerText = t.serviceMincha;
+  document.getElementById("aliyotTitle").innerText = t.aliyotTitle;
+  document.getElementById("aliyotMaftir").childNodes[0].nodeValue = t.aliyotMaftir + " ";
+  document.getElementById("editAliyot").innerText = t.editAliyot;
+  document.getElementById("aliyotHaftara").innerText = t.aliyotHaftara;
+  document.getElementById("messagesTitle").innerText = t.messagesTitle;
+  document.getElementById("msg1").innerText = t.msg1;
+  document.getElementById("msg2").innerText = t.msg2;
+  document.getElementById("classesTitle").innerText = t.classesTitle;
+  document.getElementById("class1").innerText = t.class1;
+  document.getElementById("class2").innerText = t.class2;
+  document.getElementById("paymentTitle").innerText = t.paymentTitle;
+  document.getElementById("paymentDebt").innerText = t.paymentDebt;
+  document.getElementById("paymentLast").innerText = t.paymentLast;
+  document.getElementById("torahTitle").innerText = t.torahTitle;
+  document.getElementById("torah1").innerText = t.torah1;
+  document.getElementById("torah2").innerText = t.torah2;
 }
 
 function setLanguage(lang) {
