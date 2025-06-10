@@ -16,8 +16,7 @@ const CustomNavbar = ({ user, onLogout, onShowAuth, onShowCommunityList }) => { 
   };
 
   return (
-    <RBNavbar bg="primary" variant="dark" expand="lg" className="mb-3"> {/* Changed to dark theme for contrast */}
-      <Container>
+<RBNavbar bg="light" variant="light" expand="lg" className="mb-3">      <Container>
         <RBNavbar.Brand href="#" onClick={(e) => { e.preventDefault(); onShowCommunityList(); }}>
           Kolekta
         </RBNavbar.Brand>
