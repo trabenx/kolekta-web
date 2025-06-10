@@ -6,19 +6,17 @@ import {
 } from 'firebase/auth';
 import { auth, db } from '../firebaseConfig';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { Form, Button, Card, Alert, Container, Row, Col } from 'react-bootstrap';
 
 const Auth = ({ onLoginSuccess }) => {
-  // Log to check the prop upon component initialization/render
-  console.log("Auth.jsx: INITIALIZING/RENDERING. onLoginSuccess type:", typeof onLoginSuccess, "Value:", onLoginSuccess);
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [isSignUp, setIsSignUp] = useState(true);
   const [error, setError] = useState('');
 
+  // ... (handleCreateUserProfile and handleSubmit functions remain the same for now) ...
   const handleCreateUserProfile = async (user) => {
-    // ... (keep existing code)
     if (!user) return;
     const userRef = doc(db, 'users', user.uid);
     try {
@@ -49,25 +47,21 @@ const Auth = ({ onLoginSuccess }) => {
         console.log('Auth.jsx: User signed up:', userCredential.user.email);
         await handleCreateUserProfile(userCredential.user);
         
-        // Log before calling onLoginSuccess
-        console.log('Auth.jsx: In handleSubmit (Sign Up). About to call onLoginSuccess. Type:', typeof onLoginSuccess);
         if (typeof onLoginSuccess === 'function') {
           onLoginSuccess(userCredential.user);
         } else {
           console.error('Auth.jsx: FATAL - onLoginSuccess is NOT a function here (Sign Up). Value:', onLoginSuccess);
-          setError("An unexpected error occurred after sign up. Please try logging in."); // User-friendly error
+          setError("An unexpected error occurred after sign up. Please try logging in.");
         }
       } else { // Login
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         console.log('Auth.jsx: User logged in:', userCredential.user.email);
         
-        // Log before calling onLoginSuccess
-        console.log('Auth.jsx: In handleSubmit (Login). About to call onLoginSuccess. Type:', typeof onLoginSuccess);
         if (typeof onLoginSuccess === 'function') {
           onLoginSuccess(userCredential.user);
         } else {
           console.error('Auth.jsx: FATAL - onLoginSuccess is NOT a function here (Login). Value:', onLoginSuccess);
-          setError("An unexpected error occurred after login."); // User-friendly error
+          setError("An unexpected error occurred after login.");
         }
       }
     } catch (err) {
@@ -81,65 +75,79 @@ const Auth = ({ onLoginSuccess }) => {
         friendlyMessage = 'The email address is not valid.';
       } else if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
         friendlyMessage = 'Invalid login credentials. Please check your email and password.';
+      } else {
+        friendlyMessage = "An unexpected error occurred during authentication. Please try again."
       }
       setError(friendlyMessage);
     }
   };
 
+
   return (
-    <div style={{ maxWidth: '400px', margin: '2rem auto', padding: '2rem', border: '1px solid #ccc', borderRadius: '8px' }}>
-      <h2>{isSignUp ? 'Sign Up' : 'Login'}</h2>
-      <form onSubmit={handleSubmit}>
-        {isSignUp && (
-          <div>
-            <label htmlFor="displayName">Display Name:</label>
-            <input
-              type="text"
-              id="displayName"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-              required={isSignUp}
-              style={{ width: '100%', padding: '0.5rem', marginBottom: '1rem' }}
-            />
-          </div>
-        )}
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ width: '100%', padding: '0.5rem', marginBottom: '1rem' }}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{ width: '100%', padding: '0.5rem', marginBottom: '1rem' }}
-          />
-        </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit" style={{ padding: '0.75rem', width: '100%', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px' }}>
-          {isSignUp ? 'Sign Up' : 'Login'}
-        </button>
-      </form>
-      <button
-        onClick={() => {
-          setIsSignUp(!isSignUp);
-          setError('');
-        }}
-        style={{ marginTop: '1rem', background: 'none', border: 'none', color: '#007bff', cursor: 'pointer', textDecoration: 'underline' }}
-      >
-        {isSignUp ? 'Already have an account? Login' : "Don't have an account? Sign Up"}
-      </button>
-    </div>
+    <Container className="mt-5">
+      <Row className="justify-content-md-center">
+        <Col xs={12} md={6} lg={4}>
+          <Card>
+            <Card.Body>
+              <Card.Title className="text-center mb-4">{isSignUp ? 'Sign Up' : 'Login'}</Card.Title>
+              {error && <Alert variant="danger">{error}</Alert>}
+              <Form onSubmit={handleSubmit}>
+                {isSignUp && (
+                  <Form.Group className="mb-3" controlId="formBasicDisplayName">
+                    <Form.Label>Display Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter display name"
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      required={isSignUp}
+                    />
+                  </Form.Group>
+                )}
+
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+
+                <div className="d-grid">
+                  <Button variant="primary" type="submit" >
+                    {isSignUp ? 'Sign Up' : 'Login'}
+                  </Button>
+                </div>
+              </Form>
+              <Button
+                variant="link"
+                onClick={() => {
+                  setIsSignUp(!isSignUp);
+                  setError('');
+                }}
+                className="mt-3 d-block text-center"
+              >
+                {isSignUp ? 'Already have an account? Login' : "Don't have an account? Sign Up"}
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

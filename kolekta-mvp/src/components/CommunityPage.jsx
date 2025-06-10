@@ -1,49 +1,53 @@
+
 // src/components/CommunityPage.jsx
 import React, { useState, useEffect } from 'react';
-import { db, auth } from '../firebaseConfig'; // Import db and auth
-import { doc, getDoc, updateDoc } from 'firebase/firestore'; // Import Firestore functions
+import { db, auth } from '../firebaseConfig';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { Container, Card, Button, ListGroup, Spinner, Alert, Form, Modal, Row, Col } from 'react-bootstrap';
 
-// IMPORTANT: Replace this with the actual ID of the community document you created in Firestore.
-const COMMUNITY_ID = "nAosKOP75TnBTHdKaNHV"; // E.g., "kolekta-central-synagogue" or the auto-ID
+// NO LONGER HARDCODE COMMUNITY_ID HERE
+// const COMMUNITY_ID = "nAosKOP75TnBTHdKaNHV";
 
-const CommunityPage = () => {
+const CommunityPage = ({ communityId, onBackToList }) => { // Added communityId and onBackToList props
   const [communityInfo, setCommunityInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editData, setEditData] = useState({});
   const [isAdmin, setIsAdmin] = useState(false);
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editData, setEditData] = useState({ name: '', address: '', contact: '' });
 
   useEffect(() => {
     const fetchCommunityData = async () => {
-      if (!COMMUNITY_ID) {
-        setError("Community ID is not set. Please configure it in CommunityPage.jsx");
+      if (!communityId) { // Check if communityId is provided
+        setError("No community selected.");
         setLoading(false);
         return;
       }
       try {
         setLoading(true);
-        const communityDocRef = doc(db, 'communities', COMMUNITY_ID);
+        setError(null);
+        const communityDocRef = doc(db, 'communities', communityId); // Use the prop
         const communityDocSnap = await getDoc(communityDocRef);
 
         if (communityDocSnap.exists()) {
           const data = communityDocSnap.data();
           setCommunityInfo(data);
-          setEditData({ // Initialize editData with fetched data
-            name: data.name,
-            address: data.address,
-            contact: data.contact,
-            // For simplicity, prayerTimes and upcomingEvents are not directly editable in this basic form
+          setEditData({
+            name: data.name || '',
+            address: data.address || '',
+            contact: data.contact || '',
           });
-          // Check if current user is an admin
+
           const currentUser = auth.currentUser;
+          // Admin check remains the same, relies on logged-in user
           if (currentUser && data.adminUserIds && data.adminUserIds.includes(currentUser.uid)) {
             setIsAdmin(true);
           } else {
             setIsAdmin(false);
           }
         } else {
-          setError(`Community with ID "${COMMUNITY_ID}" not found.`);
+          setError(`Community with ID "${communityId}" not found.`);
         }
       } catch (err) {
         console.error("Error fetching community data:", err);
@@ -54,7 +58,20 @@ const CommunityPage = () => {
     };
 
     fetchCommunityData();
-  }, []); // Re-fetch if COMMUNITY_ID changes, though it's constant here
+  }, [communityId]); // Re-fetch if communityId changes
+
+  // handleShowEditModal, handleCloseEditModal, handleEditChange, handleSaveChanges remain mostly the same
+  const handleShowEditModal = () => {
+    if (communityInfo) {
+        setEditData({
+            name: communityInfo.name || '',
+            address: communityInfo.address || '',
+            contact: communityInfo.contact || '',
+        });
+    }
+    setShowEditModal(true);
+  };
+  const handleCloseEditModal = () => setShowEditModal(false);
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
@@ -62,80 +79,133 @@ const CommunityPage = () => {
   };
 
   const handleSaveChanges = async () => {
-    if (!isAdmin) return;
-    const communityDocRef = doc(db, 'communities', COMMUNITY_ID);
+    if (!isAdmin || !communityId) return; // Use communityId prop
+    const communityDocRef = doc(db, 'communities', communityId); // Use communityId prop
     try {
-        // Only update fields that are part of editData
-        const dataToUpdate = {
-            name: editData.name,
-            address: editData.address,
-            contact: editData.contact,
-            // Note: prayerTimes and upcomingEvents are more complex to update this way
-            // and would require more sophisticated form handling.
-        };
+      const dataToUpdate = {
+        name: editData.name,
+        address: editData.address,
+        contact: editData.contact,
+      };
       await updateDoc(communityDocRef, dataToUpdate);
-      setCommunityInfo(prev => ({ ...prev, ...dataToUpdate })); // Update local state immediately
-      setIsEditing(false);
+      setCommunityInfo(prev => ({ ...prev, ...dataToUpdate }));
+      handleCloseEditModal();
       alert("Community details updated!");
     } catch (err) {
       console.error("Error updating community data:", err);
-      alert("Failed to update community details. " + err.message);
+      setError("Failed to update community details. " + err.message);
     }
   };
 
-  if (loading) return <div>Loading community information...</div>;
-  if (error) return <div style={{ color: 'red' }}>Error: {error}</div>;
-  if (!communityInfo) return <div>No community information available.</div>;
+
+  if (loading) {
+    return (
+      <Container className="text-center mt-5">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+        <p>Loading community information...</p>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container className="mt-5">
+        <Alert variant="danger">Error: {error}</Alert>
+        {onBackToList && <Button variant="link" onClick={onBackToList}>Back to list</Button>}
+      </Container>
+    );
+  }
+
+  if (!communityInfo) {
+    return (
+      <Container className="mt-5">
+        <Alert variant="warning">No community information available.</Alert>
+        {onBackToList && <Button variant="link" onClick={onBackToList}>Back to list</Button>}
+      </Container>
+    );
+  }
+  
+  const formatKey = (key) => {
+    return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+  };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      {isAdmin && !isEditing && (
-        <button onClick={() => setIsEditing(true)} style={{ float: 'right', marginBottom: '1rem' }}>Edit Details</button>
-      )}
-      {isAdmin && isEditing && (
-        <div style={{ border: '1px solid #ddd', padding: '1rem', marginBottom: '1rem' }}>
-          <h3>Edit Community Details</h3>
-          <div>
-            <label>Name: </label>
-            <input type="text" name="name" value={editData.name || ''} onChange={handleEditChange} style={{width: '80%', padding:'0.5rem', marginBottom:'0.5rem'}}/>
-          </div>
-          <div>
-            <label>Address: </label>
-            <input type="text" name="address" value={editData.address || ''} onChange={handleEditChange} style={{width: '80%', padding:'0.5rem', marginBottom:'0.5rem'}}/>
-          </div>
-          <div>
-            <label>Contact: </label>
-            <input type="text" name="contact" value={editData.contact || ''} onChange={handleEditChange} style={{width: '80%', padding:'0.5rem', marginBottom:'0.5rem'}}/>
-          </div>
-          <button onClick={handleSaveChanges}>Save Changes</button>
-          <button onClick={() => setIsEditing(false)} style={{ marginLeft: '0.5rem' }}>Cancel</button>
-        </div>
-      )}
+    <Container className="mt-4">
+        {onBackToList && <Button variant="outline-secondary" className="mb-3" onClick={onBackToList}>← Back to Communities List</Button>}
+      <Card>
+        <Card.Header as="h2" className="d-flex justify-content-between align-items-center">
+          Welcome to {communityInfo.name}
+          {isAdmin && auth.currentUser && ( // Ensure currentUser exists for admin actions
+            <Button variant="outline-primary" size="sm" onClick={handleShowEditModal}>
+              Edit Details
+            </Button>
+          )}
+        </Card.Header>
+        {/* ... rest of the Card.Body and Modal JSX remains the same ... */}
+        <Card.Body>
+          <Row>
+            <Col md={6}>
+              <Card.Title>Details</Card.Title>
+              <ListGroup variant="flush">
+                <ListGroup.Item><strong>Address:</strong> {communityInfo.address}</ListGroup.Item>
+                <ListGroup.Item><strong>Contact:</strong> {communityInfo.contact}</ListGroup.Item>
+              </ListGroup>
+            </Col>
+            <Col md={6}>
+              <Card.Title className="mt-3 mt-md-0">Prayer Times</Card.Title>
+              {communityInfo.prayerTimes && Object.keys(communityInfo.prayerTimes).length > 0 ? (
+                <ListGroup variant="flush">
+                  {Object.entries(communityInfo.prayerTimes).map(([key, value]) => (
+                    <ListGroup.Item key={key}><strong>{formatKey(key)}:</strong> {value}</ListGroup.Item>
+                  ))}
+                </ListGroup>
+              ) : <Alert variant="info" className="mt-2">No prayer times available.</Alert>}
+            </Col>
+          </Row>
 
-      <h2>Welcome to {communityInfo.name}</h2>
-      <p><strong>Address:</strong> {communityInfo.address}</p>
-      <p><strong>Contact:</strong> {communityInfo.contact}</p>
+          <Card.Title className="mt-4">Upcoming Events</Card.Title>
+          {communityInfo.upcomingEvents && communityInfo.upcomingEvents.length > 0 ? (
+            <ListGroup>
+              {communityInfo.upcomingEvents.map(event => (
+                <ListGroup.Item key={event.id || event.name}>
+                  <strong>{event.name}</strong> - {event.date}
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          ) : (
+            <Alert variant="info" className="mt-2">No upcoming events scheduled.</Alert>
+          )}
+        </Card.Body>
+      </Card>
 
-      <h3>Prayer Times:</h3>
-      {communityInfo.prayerTimes ? (
-        <ul>
-          {Object.entries(communityInfo.prayerTimes).map(([key, value]) => (
-            <li key={key}><strong>{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</strong> {value}</li>
-          ))}
-        </ul>
-      ) : <p>No prayer times available.</p>}
-
-      <h3>Upcoming Events:</h3>
-      {communityInfo.upcomingEvents && communityInfo.upcomingEvents.length > 0 ? (
-        <ul>
-          {communityInfo.upcomingEvents.map(event => (
-            <li key={event.id || event.name}>{event.name} - {event.date}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No upcoming events scheduled.</p>
-      )}
-    </div>
+      <Modal show={showEditModal} onHide={handleCloseEditModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Community Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="editName">
+              <Form.Label>Name</Form.Label>
+              <Form.Control type="text" name="name" value={editData.name} onChange={handleEditChange} />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="editAddress">
+              <Form.Label>Address</Form.Label>
+              <Form.Control type="text" name="address" value={editData.address} onChange={handleEditChange} />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="editContact">
+              <Form.Label>Contact</Form.Label>
+              <Form.Control type="text" name="contact" value={editData.contact} onChange={handleEditChange} />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseEditModal}>Close</Button>
+          <Button variant="primary" onClick={handleSaveChanges}>Save Changes</Button>
+        </Modal.Footer>
+      </Modal>
+    </Container>
   );
 };
 
