@@ -1,0 +1,74 @@
+Main Vision:
+- Web based app to help Synagogue management to manage all its aspects
+
+Details:
+- A user can have multiple roles in a synagogue, while having different set of roles in another
+
+- Onboarding:
+- Anyone can create and manage a synagogue
+- Guests don't need to sign-up
+
+Management Roles:
+- Receiving Donations
+- Manage prayer times
+- Manage the order of the Torah Aliyahs based on deceased relatives and other considerations
+- Manage scrolls in a fair manner
+- Send personal messages to other members
+- Send community-level messages
+- Publish Torah Lessons (repeating or one-times)
+- Share a url to join the synagogue
+- Share qr-code to join the synagogue
+- Create a list of members (based on phone number) and send bulk invitation
+- Seats arrangement (default + special occasions)
+
+Members Features:
+- Declare relative deceased
+- Watch when their scroll will be used
+- Watch the history of the times their scroll was read (+compare statistics with other scrolls)
+- Watch praying times
+- Watch messages
+- Send requests and questions to the Gabay
+- Pay donations and membership dues
+- Define family links
+
+Guests Features:
+- Watch praying times
+- Search for synagogues (based on location, praying times, etc.)
+- Donate to synagogues
+
+User types/Roles:
+- Gabay
+- Member
+- Guest
+
+UI:
+- Multilingual:
+  - Hebrew(default)/English/More in the future
+  - Support both LTR and RTL languages
+- Views:
+  - Guest:
+    - Daily times (sunrise, sunset, dawn, etc.). can modify location
+    - "Find close minyan"
+    - Donate
+    - Send message to a synagogue's gabay
+    - Browse synagogues
+  - Member:
+    - Switch between synagogues
+    - Everything in guest
+    - Customized dashboard
+    - Upcoming lessons
+    - Upcoming aliyot
+    - Messages (can be a member of more than just a single synagogue)
+    - Upcoming Yerzeits
+  - Gabay:
+    - Everything in member
+
+- Scopes:
+  - Donations
+  - Aliyot board
+  - Messages
+  - Lesson publishing
+  - Scroll management
+  - Member directory
+  - Seats arrangement
+  - Finance exports
